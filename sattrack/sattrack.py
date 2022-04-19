@@ -37,7 +37,7 @@ class SatTrack:
         self.radio = None                   # sattrack.rtlsdr.RtlSdr()
 
         if MOTOR_DEBUG_MODE:
-            print "Debug Mode..."
+            print("Debug Mode...")
 
     def set_location(self, lat=None, lon=None, ele=None):
         """
@@ -109,7 +109,7 @@ class SatTrack:
 
         if self.threads['tracker']:
             self.put_log("Already computing.")
-            print 'Already computing'
+            print('Already computing')
             return
 
         t = th.Thread(target=self._update_coords, args=[interval, trace])
@@ -136,7 +136,7 @@ class SatTrack:
                     self.satellite.compute(self.observer)
                     self._isActive = True
                 except Exception as e:
-                    print e
+                    print(e)
                     self._isActive = False
             time.sleep(t)
 
@@ -155,7 +155,7 @@ class SatTrack:
         if openbrowser:
             url = 'http://localhost' + ':' + str(self.server.port) + '/' + self.id + '/'
             url = sanitize_url(url)
-            print "opening URL: " + url
+            print("opening URL: " + url)
             wb.open(url, new=2)
         self.put_log('Started server at: ' + host)
 
@@ -169,7 +169,7 @@ class SatTrack:
 
         if self.threads['motors']:
             self.put_log("Already tracking.")
-            print 'Already tracking.'
+            print('Already tracking.')
             return
 
         t = th.Thread(target=self._update_tracker, args=[interval])
@@ -241,7 +241,7 @@ class SatTrack:
         self.default_config['timeout'] = timeout
 
         if port is None:
-            print 'Arduino port not found.'
+            print('Arduino port not found.')
             return
 
         servos = ServoController(port=port, motors=motors, mode=mode, pwm=pwm, timeout=timeout)
@@ -266,7 +266,7 @@ class SatTrack:
         import rtlsdr
         if rtlsdr.STATUS==-1:
             self.put_log('Could not connect to radio. Dependencies not installed.')
-            print 'Could not connect to radio. Dependencies not installed.'
+            print('Could not connect to radio. Dependencies not installed.')
             return
         self.radio = rtlsdr.RtlSdr(freq=freq, output=output)
         self.radio.start_radio()
@@ -376,7 +376,7 @@ class SatTrack:
             self.threads['motors'] = None
             self.put_log("Stopped tracking.")
         except (AttributeError, LookupError) as e:
-            print e
+            print(e)
             self.put_log("Not tracking anything.")
         self.stopTracking.clear()
 
@@ -398,7 +398,7 @@ class SatTrack:
         #     ServoController.serial_port.close()
         # except:
         #     pass
-        print "stopped"
+        print("stopped")
 
 
 class ServoController:
@@ -422,13 +422,13 @@ class ServoController:
                 self.serial = serial.Serial(self.portname , self.baudrate, timeout=self.timeout)
                 ServoController.serial_port = self.serial
         except serial.SerialException as e:
-            print e.message
+            print(e.message)
         self.motors = [Motor(i, self.serial, self.pwm, self.mode) for i in self.motors]
 
     def setUp(self):
         serial_arg = 'x' + str(self.pwm[0]) + '_' + str(self.pwm[1])
         self.serial.write(serial_arg)
-        print self.serial.readline().strip()
+        print(self.serial.readline().strip())
 
 
 class Motor:
@@ -466,7 +466,7 @@ class Motor:
         with ServoController.lock:
             self.port.write(serial_arg)
         if MOTOR_DEBUG_MODE:
-            print angle, self.port.readline().strip()
+            print(angle, self.port.readline().strip())
         self.current_pos = angle
 
     def _angle_to_pulse(self, angle):

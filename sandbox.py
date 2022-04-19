@@ -41,7 +41,7 @@ def test_tracking(name='AO-85', port='COM3'):
 
 def test_motor(num, interval):
     servos = ServoController(port='COM3', motors=(1,2))
-    print 'setting up controller'
+    print('setting up controller')
     servos.setUp()
     time.sleep(interval*3)
     altmotor, azmotor = servos.motors
@@ -49,7 +49,7 @@ def test_motor(num, interval):
     azmotor.map = AZMAP
     azmotor.initialize()
     altmotor.initialize()
-    print 'starting movement'
+    print('starting movement')
     for i in range(0, 91):
         if num==1:
             altmotor.move(i)
@@ -57,5 +57,5 @@ def test_motor(num, interval):
             azmotor.move(i)
         #print i
         time.sleep(interval)
-    print 'finished'
+    print('finished')
 # Azimuth motor has limits (47->143) => (-90->270)
